@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RestaurantPlanner</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="friends_menu_item">Venner</string>
+    <string name="restaurant_menu_item">Restaurant</string>
+    <string name="booking_menu_item">Booking</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_booking">
+
+    <fragment
+        android:id="@+id/navigation_booking"
+        android:name="app.sagen.restaurantplanner.ui.booking.BookingFragment"
+        android:label="Bookinger"
+        tools:layout="@layout/fragment_booking" />
+
+    <fragment
+        android:id="@+id/navigation_restaurants"
+        android:name="app.sagen.restaurantplanner.ui.restaurants.RestaurantsFragment"
+        android:label="Restauranter"
+        tools:layout="@layout/fragment_restaurants" />
+
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="app.sagen.restaurantplanner.ui.friends.FriendsFragment"
+        android:label="Venner"
+        tools:layout="@layout/fragment_friends" />
+
+</navigation>

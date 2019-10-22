@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_item_background">
+    
+    <TextView
+        android:id="@+id/restaurant_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Greasy Heaven"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:stretchColumns="2"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/restaurant_type_title"
+                android:layout_height="wrap_content"
+                android:text="Type: "
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/restaurant_type"
+                android:layout_span="2"
+                android:layout_height="wrap_content"
+                android:text="Burger Joint"
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/restaurant_address_name"
+                android:layout_height="wrap_content"
+                android:text="Addresse: "
+                android:textSize="15sp"
+
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/restaurant_address"
+                android:layout_span="2"
+                android:layout_height="wrap_content"
+                android:text="Bergsalleen 8c, 0854 Oslo"
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/restaurant_phone_name"
+                android:layout_height="wrap_content"
+                android:text="Telefon: "
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/restaurant_phone"
+                android:layout_span="2"
+                android:layout_height="wrap_content"
+                android:text="48073448"
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>
