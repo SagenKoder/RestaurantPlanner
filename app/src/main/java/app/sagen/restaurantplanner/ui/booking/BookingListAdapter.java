@@ -1,4 +1,4 @@
-package app.sagen.restaurantplanner.ui.restaurants;
+package app.sagen.restaurantplanner.ui.booking;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,11 +13,12 @@ import java.util.List;
 import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;
+import app.sagen.restaurantplanner.data.Booking;
 import app.sagen.restaurantplanner.data.Restaurant;
 
-public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
+public class BookingListAdapter extends ArrayAdapter<Booking> {
 
-    public RestaurantListAdapter(@NonNull Context context) {
+    public BookingListAdapter(@NonNull Context context) {
         super(context, -1);
     }
 
@@ -30,19 +31,19 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
             view = inflater.inflate(R.layout.fragment_restaurant_item, parent, false);
         }
 
-        final Restaurant restaurant = getItem(position);
+        final Booking booking = getItem(position);
 
-        if (restaurant != null) {
-            TextView name = view.findViewById(R.id.restaurant_name);
-            TextView type = view.findViewById(R.id.restaurant_type);
-            TextView address = view.findViewById(R.id.restaurant_address);
-            TextView phone = view.findViewById(R.id.restaurant_phone);
-
-            name.setText(restaurant.getName());
-            type.setText(restaurant.getType());
-            address.setText(restaurant.getAddress());
-            phone.setText(restaurant.getPhone());
-        }
+//        if (booking != null) {
+//            TextView name = view.findViewById(R.id.restaurant_name);
+//            TextView type = view.findViewById(R.id.restaurant_type);
+//            TextView address = view.findViewById(R.id.restaurant_address);
+//            TextView phone = view.findViewById(R.id.restaurant_phone);
+//
+//            name.setText(booking.getName());
+//            type.setText(booking.getType());
+//            address.setText(booking.getAddress());
+//            phone.setText(booking.getPhone());
+//        }
 
         return view;
     }

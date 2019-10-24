@@ -1,16 +1,22 @@
 package app.sagen.restaurantplanner.ui.friends;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.ListFragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Friend;
@@ -19,7 +25,7 @@ import app.sagen.restaurantplanner.db.DBHandler;
 public class FriendsFragment extends ListFragment {
 
     private static final String TAG = "FriendsFragment";
-    
+
     FriendsListAdapter friendsListAdapter;
     DBHandler db;
 
@@ -27,9 +33,28 @@ public class FriendsFragment extends ListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         db = new DBHandler(getContext());
-        friendsListAdapter = new FriendsListAdapter(getActivity(), db.getAllFriends());
+        friendsListAdapter = new FriendsListAdapter(getActivity());
         setListAdapter(friendsListAdapter);
         setEmptyText("Du har ingen venner i listen. Opprett en ny venn med + knappen!");
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        ViewGroup parent = (ViewGroup) inflater.inflate(R.layout.fragment_friends, container, false);
+        parent.addView(v, 0);
+
+        FloatingActionButton fab = parent.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: FRIEND");
+                Intent intent = new Intent(getContext(), CreateFriendActivity.class);
+                startActivity(intent);
+            }
+        });
+        return parent;
     }
 
     @Override
@@ -48,9 +73,22 @@ public class FriendsFragment extends ListFragment {
         PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END, 0, R.style.PopupMenuMoreCentralized);
         popup.setOnMenuItemClickListener(listener);
         popup.setOnDismissListener(listener);
-        popup.inflate(R.menu.friend_item_menu);
+        popup.inflate(R.menu.item_context_menu);
         popup.show();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+    }
+
+    private void updateList() {
+        friendsListAdapter.clear();
+        friendsListAdapter.addAll(db.getAllFriends());
+        friendsListAdapter.notifyDataSetChanged();
+    }
+
 
     /**
      * Handles events from the context menu
@@ -71,14 +109,14 @@ public class FriendsFragment extends ListFragment {
             switch (item.getItemId()) {
                 case R.id.edit:
                     Log.d(TAG, "onMenuItemClick: CLICKED EDIT");
-                    // todo
+                    Intent intent = new Intent(getContext(), CreateFriendActivity.class);
+                    intent.putExtra("editFriendId", friend.getId());
+                    startActivity(intent);
                     return true;
                 case R.id.delete:
                     Log.d(TAG, "onMenuItemClick: CLICKED DELETE");
                     db.deleteFriend(friend);
-                    friendsListAdapter.clear();
-                    friendsListAdapter.addAll(db.getAllFriends());
-                    friendsListAdapter.notifyDataSetChanged();
+                    updateList();
                     return true;
                 default:
                     return false;

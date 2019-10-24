@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/create_restaurant_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Registrer en restaurant"
+        android:textColor="#222"
+        android:textSize="25sp"
+        android:typeface="serif" />
+
+    <EditText
+        android:id="@+id/create_restaurant_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:hint="Navn"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/create_restaurant_phone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:hint="Telefon"
+        android:inputType="phone" />
+
+    <EditText
+        android:id="@+id/create_restaurant_address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:hint="Addresse"
+        android:inputType="textPostalAddress" />
+
+    <EditText
+        android:id="@+id/create_restaurant_type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:hint="Kategori"
+        android:inputType="textShortMessage" />
+
+    <Button
+        android:id="@+id/create_restaurant_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/primaryDarkColor"
+        android:elevation="4dp"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp"
+        android:text="Submit"
+        android:textColor="#fff" />
+</LinearLayout>

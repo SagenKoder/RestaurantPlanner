@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -28,7 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TAG = "DBHandler";
 
     private static String DATABASE_NAME = "RestaurantPlanner";
-    private static int DATABASE_VERSION = 15;
+    private static int DATABASE_VERSION = 21;
 
     public DBHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,7 +39,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         Log.d(TAG, "onCreate: BEGINNING...");
-        
+
         String createFriendTable = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(100), %s CHAR(8));",
                 Friend.TABLE_FRIENDS,
                 Friend.COLUMN_ID,
@@ -88,14 +89,29 @@ public class DBHandler extends SQLiteOpenHelper {
         Log.d(TAG, "onCreate: SQL " + createBookingHasFriendTable);
         db.execSQL(createBookingHasFriendTable);
 
-        seedFriends(db);
+        //seedFriends(db);
         seedRestaurants(db);
+
+        Restaurant restaurant = new Restaurant("MyFancyRestaurant", "Nils Olav Gate 3", "12345678", "Bar");
+        createRestaurant(db, restaurant);
+
+        Booking booking = new Booking();
+        booking.setDateTime(new Date());
+        booking.setRestaurant(restaurant); // same restaurant
+        booking.setFriends(seedFriends(db)); // created 5 friends
+        createBooking(db, booking);
+
+        Booking booking2 = new Booking();
+        booking2.setDateTime(new Date());
+        booking2.setRestaurant(restaurant); // same restaurant
+        booking2.setFriends(seedFriends(db)); // created 5 friends
+        createBooking(db, booking2);
     }
 
-    public void seedFriends(SQLiteDatabase db) {
+    public List<Friend> seedFriends(SQLiteDatabase db) {
         List<Friend> friends = new ArrayList<>();
         String names =
-                        "    Mistie Mcaleer\n" +
+                "    Mistie Mcaleer\n" +
                         "    Rebeca Renick\n" +
                         "    Yesenia Yardley\n" +
                         "    Eduardo Eisenbarth";
@@ -105,6 +121,8 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         for (Friend friend : friends) createFriend(db, friend);
+
+        return friends;
     }
 
     public void seedRestaurants(SQLiteDatabase db) {
@@ -130,12 +148,17 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String dropFriends = "DROP TABLE IF EXISTS " + Friend.TABLE_FRIENDS;
         String dropRestaurants = "DROP TABLE IF EXISTS " + Restaurant.TABLE_RESTAURANTS;
+        String dropBooking = "DROP TABLE IF EXISTS " + Booking.TABLE_BOOKING;
+        String dropBookingFriend = "DROP TABLE IF EXISTS " + Booking.TABLE_BOOKING_FRIEND;
 
         Log.d(TAG, "onUpgrade: SQL " + dropFriends);
         db.execSQL(dropFriends);
-
         Log.d(TAG, "onUpgrade: SQL " + dropRestaurants);
         db.execSQL(dropRestaurants);
+        Log.d(TAG, "onUpgrade: SQL " + dropBooking);
+        db.execSQL(dropBooking);
+        Log.d(TAG, "onUpgrade: SQL " + dropBookingFriend);
+        db.execSQL(dropBookingFriend);
 
         onCreate(db);
     }
@@ -157,8 +180,8 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Friend.COLUMN_NAME, friend.getName());
         values.put(Friend.COLUMN_PHONE, friend.getPhone());
-        db.insert(Friend.TABLE_FRIENDS, null, values);
-
+        long id = db.insert(Friend.TABLE_FRIENDS, null, values);
+        friend.setId(id);
         Log.d(TAG, "createFriend: FRIEND " + friend);
     }
 
@@ -233,6 +256,26 @@ public class DBHandler extends SQLiteOpenHelper {
         return friends;
     }
 
+    public Friend getFriend(long id) {
+        String select = String.format("SELECT * FROM %s WHERE %s = %s", Friend.TABLE_FRIENDS, Friend.COLUMN_ID, id);
+
+        Log.d(TAG, "getFriend: SQL " + select);
+
+        try (SQLiteDatabase db = this.getWritableDatabase();
+             Cursor cursor = db.rawQuery(select, null)) {
+
+            if (cursor.moveToFirst() && !cursor.isAfterLast()) {
+                Friend friend = new Friend();
+                friend.setId(cursor.getLong(0));
+                friend.setName(cursor.getString(1));
+                friend.setPhone(cursor.getString(2));
+
+                return friend;
+            }
+            return null;
+        }
+    }
+
     /* /FRIEND */
 
 
@@ -255,7 +298,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(Restaurant.COLUMN_PHONE, restaurant.getPhone());
         values.put(Restaurant.COLUMN_TYPE, restaurant.getType());
 
-        db.insert(Restaurant.TABLE_RESTAURANTS, null, values);
+        long id = db.insert(Restaurant.TABLE_RESTAURANTS, null, values);
+        restaurant.setId(id);
     }
 
     public void updateRestaurant(Restaurant restaurant) {
@@ -361,7 +405,7 @@ public class DBHandler extends SQLiteOpenHelper {
     /* /RESTAURANT */
 
     /* BOOKING */
-    SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:MM", Locale.getDefault());
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
 
     public void createBooking(Booking booking) {
         try (SQLiteDatabase db = this.getWritableDatabase()) {
@@ -376,8 +420,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         bookingValues.put(Booking.COLUMN_DATE, sdf.format(booking.getDateTime()));
         bookingValues.put(Booking.COLUMN_RESTAURANT_ID, booking.getRestaurant().getId());
-
-        booking.setId(db.insert(Booking.TABLE_BOOKING, null, bookingValues));
+        long id = db.insert(Booking.TABLE_BOOKING, null, bookingValues);
+        booking.setId(id);
 
         db.beginTransaction();
         try {
@@ -433,7 +477,7 @@ public class DBHandler extends SQLiteOpenHelper {
         try (SQLiteDatabase db = this.getWritableDatabase()) {
             db.delete(Booking.TABLE_BOOKING_FRIEND,
                     String.format("%s = ? AND %s = ?", Booking.COLUMN_JOIN_BOOKING_ID, Booking.COLUMN_JOIN_FRIEND_ID),
-                    new String[] {String.valueOf(booking.getId()), String.valueOf(friend.getId())});
+                    new String[]{String.valueOf(booking.getId()), String.valueOf(friend.getId())});
         } catch (SQLException e) {
             Log.e(TAG, "updateBookingRemoveFriend: ", e);
         }
@@ -456,6 +500,48 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public List<Friend> getFriendBookings(Booking booking) {
+        List<Friend> friends = new ArrayList<>();
+        String select = String.format("SELECT %s.* FROM %s, %s WHERE %s.%s = %s.%s AND %s.%s = " + booking.getId(),
+                Friend.TABLE_FRIENDS,
+                Friend.TABLE_FRIENDS,
+                Booking.TABLE_BOOKING_FRIEND,
+                Booking.TABLE_BOOKING_FRIEND, Booking.COLUMN_JOIN_FRIEND_ID,
+                Friend.TABLE_FRIENDS, Friend.COLUMN_ID,
+                Booking.TABLE_BOOKING_FRIEND, Booking.COLUMN_JOIN_BOOKING_ID);
+
+        Log.d(TAG, "getFriendBookings: SQL " + select);
+
+        try (SQLiteDatabase db = this.getWritableDatabase();
+             Cursor cursor = db.rawQuery(select, null)) {
+
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+
+                    Friend friend = new Friend();
+                    friend.setId(cursor.getLong(0));
+                    friend.setName(cursor.getString(1));
+                    friend.setPhone(cursor.getString(2));
+
+                    friends.add(friend);
+
+                    cursor.moveToNext();
+                }
+            }
+        }
+
+        Collections.sort(friends, new Comparator<Friend>() {
+            @Override
+            public int compare(Friend o1, Friend o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        Log.d(TAG, "getFriendBookings: FRIENDS " + friends);
+
+        return friends;
+    }
+
     public List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
         String select = String.format("SELECT * FROM %s", Booking.TABLE_BOOKING);
@@ -473,7 +559,7 @@ public class DBHandler extends SQLiteOpenHelper {
                         booking.setId(cursor.getLong(0));
                         booking.setDateTime(sdf.parse(cursor.getString(1)));
                         booking.setRestaurant(getRestaurant(cursor.getLong(2)));
-
+                        booking.setFriends(getFriendBookings(booking));
                         bookings.add(booking);
 
                     } catch (ParseException e) {
@@ -495,6 +581,33 @@ public class DBHandler extends SQLiteOpenHelper {
         Log.d(TAG, "getAllBookings: BOOKINGS " + bookings);
 
         return bookings;
+    }
+
+    public Booking getBooking(long id) {
+        String select = String.format("SELECT * FROM %s WHERE %s = %s", Booking.TABLE_BOOKING, Booking.COLUMN_ID, id);
+
+        Log.d(TAG, "getBooking: SQL " + select);
+
+        try (SQLiteDatabase db = this.getWritableDatabase();
+             Cursor cursor = db.rawQuery(select, null)) {
+
+            if (cursor.moveToFirst() && !cursor.isAfterLast()) {
+
+                try {
+                    Booking booking = new Booking();
+                    booking.setId(cursor.getLong(0));
+                    booking.setDateTime(sdf.parse(cursor.getString(1)));
+                    booking.setRestaurant(getRestaurant(cursor.getLong(2)));
+                    booking.setFriends(getFriendBookings(booking));
+                    return booking;
+
+                } catch (ParseException e) {
+                    Log.e(TAG, "getBooking: ", e);
+                }
+            }
+        }
+
+        return null;
     }
 
     /* /BOOKING */

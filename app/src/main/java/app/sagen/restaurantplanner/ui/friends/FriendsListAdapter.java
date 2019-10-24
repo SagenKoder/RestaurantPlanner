@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;
@@ -17,8 +16,8 @@ import app.sagen.restaurantplanner.data.Friend;
 
 public class FriendsListAdapter extends ArrayAdapter<Friend> {
 
-    public FriendsListAdapter(@NonNull Context context, List<Friend> friends) {
-        super(context, -1, friends);
+    public FriendsListAdapter(@NonNull Context context) {
+        super(context, -1);
     }
 
     @Override
