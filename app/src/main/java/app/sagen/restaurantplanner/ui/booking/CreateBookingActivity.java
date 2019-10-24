@@ -70,51 +70,13 @@ public class CreateBookingActivity extends AppCompatActivity {
         List<Restaurant> restaurantList = dbHandler.getAllRestaurants();
 
         final Booking booking = dbHandler.getBooking(bookingId);
-        final Spinner restaurantInput = findViewById(R.id.create_booking_restaurant);
+        final TextView restaurantInputLabel = findViewById(R.id.create_booking_restaurant_label);
+        final Button restaurantInput = findViewById(R.id.create_booking_restaurant);
         final Button selectDate = findViewById(R.id.create_booking_date);
         final TextView selectDateLabel = findViewById(R.id.create_booking_date_label);
         updateDatelabel(selectDateLabel);
 
-        int id = -1;
-        for(int i = 0; i < restaurantList.size(); i++) {
-            if(restaurantList.get(i).getId() == booking.getRestaurant().getId()) {
-                id = i;
-                break;
-            }
-        }
-
-        restaurantInput.setAdapter(new ArrayAdapter<Restaurant>(this, android.R.layout.simple_list_item_multiple_choice, restaurantList) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
-                if (view == null) {
-                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    Objects.requireNonNull(inflater);
-                    view = inflater.inflate(android.R.layout.simple_list_item_single_choice, parent, false);
-                }
-                Restaurant restaurant = getItem(position);
-                TextView textView = view.findViewById(android.R.id.text1);
-                textView.setText(restaurant.getName());
-
-                return view;
-            }
-        });
-
-        restaurantInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                closeContextMenu();
-                closeOptionsMenu();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        if(id >= 0) {
-            restaurantInput.setSelection(id);
-        }
+        // todo: https://stackoverflow.com/questions/20017329/android-select-items-in-a-multi-select-listview-inside-alertdialog
 
         final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
             @Override
