@@ -22,10 +22,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -33,14 +35,19 @@ import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Booking;
+import app.sagen.restaurantplanner.data.Friend;
 import app.sagen.restaurantplanner.data.Restaurant;
 import app.sagen.restaurantplanner.db.DBHandler;
+import app.sagen.restaurantplanner.ui.booking.menus.FriendsSelector;
+import app.sagen.restaurantplanner.ui.booking.menus.RestaurantSelector;
 
 public class CreateBookingActivity extends AppCompatActivity {
 
     private DBHandler dbHandler;
     private Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
+
+    Booking booking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +67,34 @@ public class CreateBookingActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         getWindow().setDimAmount(0.60f);
 
-        final long bookingId;
+        final boolean edit;
         if (getIntent().hasExtra("editBookingId")) {
-            bookingId = getIntent().getLongExtra("editBookingId", -1);
+            edit = true;
+            long id = getIntent().getLongExtra("editBookingId", -1);
+            Booking booking = dbHandler.getBooking(id);
+            this.booking = booking;
         } else {
-            bookingId = -1;
+            edit = false;
+            this.booking = new Booking();
         }
 
         List<Restaurant> restaurantList = dbHandler.getAllRestaurants();
+        if(booking.getRestaurant() == null) booking.setRestaurant(restaurantList.get(0));
 
-        final Booking booking = dbHandler.getBooking(bookingId);
+        List<Friend> friendList = dbHandler.getAllFriends();
+        if(booking.getFriends() == null) booking.setFriends(new ArrayList<Friend>());
+
         final TextView restaurantInputLabel = findViewById(R.id.create_booking_restaurant_label);
+        restaurantInputLabel.setText(booking.getRestaurant().getName());
+
         final Button restaurantInput = findViewById(R.id.create_booking_restaurant);
         final Button selectDate = findViewById(R.id.create_booking_date);
         final TextView selectDateLabel = findViewById(R.id.create_booking_date_label);
+        final Button friendsButton = findViewById(R.id.create_booking_friend);
+        final TextView friendLabel = findViewById(R.id.create_booking_friend_label);
+        friendLabel.setText(String.format("%s venner valgt", booking.getFriends().size()));
+        final Button submitButton = findViewById(R.id.create_booking_submit);
+
         updateDatelabel(selectDateLabel);
 
         // todo: https://stackoverflow.com/questions/20017329/android-select-items-in-a-multi-select-listview-inside-alertdialog
@@ -85,6 +106,8 @@ public class CreateBookingActivity extends AppCompatActivity {
                 calendar.set(Calendar.MINUTE, minute);
 
                 updateDatelabel(selectDateLabel);
+                booking.setDateTime(calendar.getTime());
+                dbHandler.updateBookingDateOrRestaurant(booking);
             }
         };
 
@@ -96,6 +119,8 @@ public class CreateBookingActivity extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 updateDatelabel(selectDateLabel);
+                booking.setDateTime(calendar.getTime());
+                dbHandler.updateBookingDateOrRestaurant(booking);
 
                 new TimePickerDialog(CreateBookingActivity.this, time,
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -103,6 +128,7 @@ public class CreateBookingActivity extends AppCompatActivity {
             }
         };
 
+        // open date selector
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,47 +139,55 @@ public class CreateBookingActivity extends AppCompatActivity {
             }
         });
 
-//        final EditText nameInput = findViewById(R.id.create_restaurant_name);
-//        final EditText phoneInput = findViewById(R.id.create_restaurant_phone);
-//        final EditText addressInput = findViewById(R.id.create_restaurant_address);
-//        final EditText typeInput = findViewById(R.id.create_restaurant_type);
-//        final TextView title = findViewById(R.id.create_restaurant_title);
-//
-//        final Restaurant restaurant = dbHandler.getRestaurant(restaurantId);
-//        if (restaurantId > 0) {
-//            if (restaurant == null) {
-//                finish(); // just exit...
-//                return;
-//            }
-//            title.setText("Rediger en restaurant");
-//            nameInput.setText(restaurant.getName());
-//            phoneInput.setText(restaurant.getPhone());
-//            typeInput.setText(restaurant.getType());
-//            addressInput.setText(restaurant.getAddress());
-//        }
-//
-//        Button button = findViewById(R.id.create_restaurant_submit);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (restaurant != null) {
-//                    restaurant.setName(nameInput.getText().toString());
-//                    restaurant.setPhone(phoneInput.getText().toString());
-//                    restaurant.setAddress(addressInput.getText().toString());
-//                    restaurant.setType(phoneInput.getText().toString());
-//                    dbHandler.updateRestaurant(restaurant);
-//                    Toast.makeText(getApplicationContext(), "Endring lagret!", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    dbHandler.createRestaurant(new Restaurant(
-//                            nameInput.getText().toString(),
-//                            addressInput.getText().toString(),
-//                            phoneInput.getText().toString(),
-//                            typeInput.getText().toString()));
-//                    Toast.makeText(getApplicationContext(), "Du la til en ny restaurant!", Toast.LENGTH_SHORT).show();
-//                }
-//                finish();
-//            }
-//        });
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // create restaurantselector
+        final RestaurantSelector restaurantSelector = new RestaurantSelector(restaurantList, -1, new RestaurantSelector.RestaurantSelectorCallback() {
+            @Override
+            public void onFinish(Restaurant restaurant) {
+                booking.setRestaurant(restaurant);
+                dbHandler.updateBookingDateOrRestaurant(booking);
+                restaurantInputLabel.setText(booking.getRestaurant().getName());
+            }
+        });
+
+        // open restaurant selector
+        restaurantInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restaurantSelector.show(fragmentManager, "restaurantSelector");
+            }
+        });
+
+        final FriendsSelector friendsSelector = new FriendsSelector(friendList, booking.getFriends(), new FriendsSelector.FriendSelectorCallback() {
+            @Override
+            public void onFinish(List<Friend> addFriends, List<Friend> removeFriends) {
+                for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
+                for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
+
+                booking.getFriends().removeAll(removeFriends);
+                booking.getFriends().addAll(addFriends);
+
+                friendLabel.setText(String.format("%s venner valgt", booking.getFriends().size()));
+            }
+        });
+
+        friendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friendsSelector.show(fragmentManager, "friendsSelector");
+            }
+        });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(edit) {
+                    dbHandler.updateBookingDateOrRestaurant(booking);
+                    finish();
+                }
+            }
+        });
     }
 
     private void updateDatelabel(TextView textView) {

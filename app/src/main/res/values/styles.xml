@@ -27,4 +27,15 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="AppPreference" parent="PreferenceFragment">
+    </style>
+
+    <style name="AppPreference.DialogPreference">
+        <item name="positiveButtonText">@android:string/ok</item>
+        <item name="negativeButtonText">@android:string/cancel</item>
+    </style>
+
+    <style name="AppTheme.PreferencesFragment" parent="@android:style/Theme">
+    </style>
+
 </resources>

@@ -1,5 +1,7 @@
 package app.sagen.restaurantplanner.data;
 
+import java.util.Objects;
+
 public class Friend {
 
     public static String TABLE_FRIENDS = "friend";
@@ -47,5 +49,18 @@ public class Friend {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Friend)) return false;
+        Friend friend = (Friend) o;
+        return id == friend.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

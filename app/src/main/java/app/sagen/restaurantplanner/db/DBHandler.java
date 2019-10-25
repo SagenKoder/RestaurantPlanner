@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -29,7 +28,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TAG = "DBHandler";
 
     private static String DATABASE_NAME = "RestaurantPlanner";
-    private static int DATABASE_VERSION = 21;
+    private static int DATABASE_VERSION = 22;
 
     public DBHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -90,22 +89,22 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(createBookingHasFriendTable);
 
         //seedFriends(db);
-        seedRestaurants(db);
-
-        Restaurant restaurant = new Restaurant("MyFancyRestaurant", "Nils Olav Gate 3", "12345678", "Bar");
-        createRestaurant(db, restaurant);
-
-        Booking booking = new Booking();
-        booking.setDateTime(new Date());
-        booking.setRestaurant(restaurant); // same restaurant
-        booking.setFriends(seedFriends(db)); // created 5 friends
-        createBooking(db, booking);
-
-        Booking booking2 = new Booking();
-        booking2.setDateTime(new Date());
-        booking2.setRestaurant(restaurant); // same restaurant
-        booking2.setFriends(seedFriends(db)); // created 5 friends
-        createBooking(db, booking2);
+//        seedRestaurants(db);
+//
+//        Restaurant restaurant = new Restaurant("MyFancyRestaurant", "Nils Olav Gate 3", "12345678", "Bar");
+//        createRestaurant(db, restaurant);
+//
+//        Booking booking = new Booking();
+//        booking.setDateTime(new Date());
+//        booking.setRestaurant(restaurant); // same restaurant
+//        booking.setFriends(seedFriends(db)); // created 5 friends
+//        createBooking(db, booking);
+//
+//        Booking booking2 = new Booking();
+//        booking2.setDateTime(new Date());
+//        booking2.setRestaurant(restaurant); // same restaurant
+//        booking2.setFriends(seedFriends(db)); // created 5 friends
+//        createBooking(db, booking2);
     }
 
     public List<Friend> seedFriends(SQLiteDatabase db) {
@@ -467,7 +466,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(Booking.COLUMN_JOIN_BOOKING_ID, booking.getId());
             values.put(Booking.COLUMN_JOIN_FRIEND_ID, friend.getId());
 
-            db.insert(Booking.TABLE_BOOKING_FRIEND, null, values);
+            db.insertWithOnConflict(Booking.TABLE_BOOKING_FRIEND, null, values, SQLiteDatabase.CONFLICT_ABORT);
         } catch (SQLException e) {
             Log.e(TAG, "updateBookingAddFriend: ", e);
         }

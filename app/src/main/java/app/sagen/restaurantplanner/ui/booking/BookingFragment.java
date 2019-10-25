@@ -1,5 +1,7 @@
 package app.sagen.restaurantplanner.ui.booking;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -49,6 +51,19 @@ public class BookingFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: BOOKINGER");
+                if(db.getAllRestaurants().size() == 0) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(BookingFragment.this.getActivity()).create();
+                    alertDialog.setTitle("Ingen restauranter");
+                    alertDialog.setMessage("Gå til restaurant panelet for å legge til en restaurant først.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    return;
+                }
                 Intent intent = new Intent(getContext(), CreateBookingActivity.class);
                 startActivity(intent);
             }

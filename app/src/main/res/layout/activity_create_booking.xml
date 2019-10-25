@@ -51,8 +51,25 @@
         android:layout_marginTop="10dp"
         android:hint="Restaurant"/>
 
+    <TextView
+        android:textAlignment="center"
+        android:id="@+id/create_booking_friend_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:hint="Dato og tid"
+        android:textSize="25sp"/>
+
     <Button
-        android:id="@+id/create_restaurant_submit"
+        android:id="@+id/create_booking_friend"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:hint="Restaurant"/>
+
+    <Button
+        android:id="@+id/create_booking_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

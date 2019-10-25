@@ -12,11 +12,14 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".preferences.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
             android:name=".ui.restaurants.CreateRestaurantActivity"
-            android:theme="@style/AppTheme.PopupTheme"/>
+            android:theme="@style/AppTheme.PopupTheme" />
         <activity
             android:name=".ui.booking.CreateBookingActivity"
-            android:theme="@style/AppTheme.PopupTheme"/>
+            android:theme="@style/AppTheme.PopupTheme" />
         <activity
             android:name=".ui.friends.CreateFriendActivity"
             android:theme="@style/AppTheme.PopupTheme" />

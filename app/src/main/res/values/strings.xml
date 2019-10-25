@@ -7,4 +7,10 @@
     <string name="restaurant_menu_item">Restaurant</string>
     <string name="booking_menu_item">Booking</string>
     <string name="title_activity_create_friend">CreateFriendActivity</string>
+    <string name="title_activity_settings">Innstillinger</string>
+    <string name="settings_enable_notifications_title">Skru på varsel tjenesten</string>
+    <string name="settings_title_sms_service">Sms tjeneste</string>
+    <string name="settings_enable_sms_title">Send sms til venner</string>
+    <string name="settings_sms_message_title">Sms melding</string>
+    <string name="settings_sms_message_default">Hei %friend,\njeg har booket bord hos %restaurant klokken %time.\n\nAddresse: %address\nTelefon: %phone\n\nVennlig hilsen</string>
 </resources>

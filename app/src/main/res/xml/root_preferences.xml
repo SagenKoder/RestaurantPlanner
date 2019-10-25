@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Varseltjeneste">
+        <SwitchPreferenceCompat
+            app:key="NotificationSerice"
+            app:title="@string/settings_enable_notifications_title"
+            app:defaultValue="true"
+            app:useSimpleSummaryProvider="true"  />
+        <app.sagen.restaurantplanner.preferences.TimePreference
+            app:key="SmsTimeOfDay2"
+            app:defaultValue="08:00"
+            app:dependency="NotificationSerice"
+            app:title="Tid for sms og varsler"
+            app:useSimpleSummaryProvider="true"
+            style="@style/AppTheme.PreferencesFragment"/>
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/settings_title_sms_service">
+        <SwitchPreferenceCompat
+            app:key="SmsEnable"
+            app:defaultValue="true"
+            app:dependency="NotificationSerice"
+            app:title="@string/settings_enable_sms_title"
+            app:useSimpleSummaryProvider="true"  />
+        <EditTextPreference
+            app:key="SmsMessage"
+            app:title="@string/settings_sms_message_title"
+            app:defaultValue="@string/settings_sms_message_default"
+            app:dependency="NotificationSerice"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</PreferenceScreen>
