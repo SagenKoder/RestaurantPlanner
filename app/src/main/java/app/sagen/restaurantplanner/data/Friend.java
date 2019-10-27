@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Friend {
 
     public static String TABLE_FRIENDS = "friend";
-    public static String COLUMN_ID = "id";
+    public static String COLUMN_ID = "_id";
     public static String COLUMN_NAME = "name";
     public static String COLUMN_PHONE = "phone";
 

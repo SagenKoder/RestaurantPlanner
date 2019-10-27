@@ -13,10 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.sagen.restaurantplanner.data.Booking;
 import app.sagen.restaurantplanner.data.Friend;
-import app.sagen.restaurantplanner.data.Restaurant;
-import app.sagen.restaurantplanner.db.DBHandler;
 
 public class FriendsSelector extends DialogFragment {
 
@@ -55,7 +52,7 @@ public class FriendsSelector extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Velg en restaurant");
+        builder.setTitle("Velg en venn");
         builder.setMultiChoiceItems(friendNames, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
             public void onClick(DialogInterface dialog, int item, boolean isChecked) {
                 isChecked = !isChecked; // update to next value
@@ -78,7 +75,7 @@ public class FriendsSelector extends DialogFragment {
 
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
-        Log.e(TAG, "onCancel: CANCEL2");
+        Log.e(TAG, String.format("onCancel: CANCEL2 +%s -%s", addFriends.size(), removeFriends.size()));
         callback.onFinish(addFriends, removeFriends);
         super.onCancel(dialog);
     }

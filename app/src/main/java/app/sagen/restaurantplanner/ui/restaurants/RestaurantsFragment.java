@@ -20,7 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Restaurant;
-import app.sagen.restaurantplanner.db.DBHandler;
+import app.sagen.restaurantplanner.data.DBHandler;
 
 public class RestaurantsFragment extends ListFragment {
 

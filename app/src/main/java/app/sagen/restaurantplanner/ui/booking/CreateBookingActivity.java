@@ -2,42 +2,29 @@ package app.sagen.restaurantplanner.ui.booking;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Booking;
 import app.sagen.restaurantplanner.data.Friend;
 import app.sagen.restaurantplanner.data.Restaurant;
-import app.sagen.restaurantplanner.db.DBHandler;
+import app.sagen.restaurantplanner.data.DBHandler;
 import app.sagen.restaurantplanner.ui.booking.menus.FriendsSelector;
 import app.sagen.restaurantplanner.ui.booking.menus.RestaurantSelector;
 
@@ -48,6 +35,8 @@ public class CreateBookingActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
 
     Booking booking;
+    List<Friend> addFriends = new ArrayList<>();
+    List<Friend> removeFriends = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +151,11 @@ public class CreateBookingActivity extends AppCompatActivity {
         final FriendsSelector friendsSelector = new FriendsSelector(friendList, booking.getFriends(), new FriendsSelector.FriendSelectorCallback() {
             @Override
             public void onFinish(List<Friend> addFriends, List<Friend> removeFriends) {
-                for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
-                for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
-
                 booking.getFriends().removeAll(removeFriends);
                 booking.getFriends().addAll(addFriends);
+
+                CreateBookingActivity.this.removeFriends = removeFriends;
+                CreateBookingActivity.this.addFriends = addFriends;
 
                 friendLabel.setText(String.format("%s venner valgt", booking.getFriends().size()));
             }
@@ -184,8 +173,14 @@ public class CreateBookingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(edit) {
                     dbHandler.updateBookingDateOrRestaurant(booking);
-                    finish();
+                    for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
+                    for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
+                } else {
+                    dbHandler.createBooking(booking);
+                    for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
+                    for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
                 }
+                finish();
             }
         });
     }

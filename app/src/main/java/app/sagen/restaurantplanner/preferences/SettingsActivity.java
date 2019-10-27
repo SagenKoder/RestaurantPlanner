@@ -1,28 +1,32 @@
 package app.sagen.restaurantplanner.preferences;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceFragment;
 
 import app.sagen.restaurantplanner.R;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-        getSupportFragmentManager()
+        getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -41,22 +45,29 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragment {
+
+        public SettingsFragment() {
+            super();
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            setPreferencesFromResource(R.xml.preferences, rootKey);
         }
 
         @Override
         public void onDisplayPreferenceDialog(Preference preference) {
-            DialogFragment timeFragment = null;
             if (preference instanceof TimePreference) {
-                timeFragment = TimePreferenceDialogFragment.newInstance(preference.getKey());
-            }
-
-            if (timeFragment != null) {
+                DialogFragment timeFragment = TimePreferenceDialogFragment.newInstance(preference.getKey());
                 timeFragment.setTargetFragment(this, 0);
-                timeFragment.show(this.getFragmentManager(), "timeFragment");
+                FragmentManager fragmentManager = getFragmentManager();
+                timeFragment.show(fragmentManager, "someRandomTag");
             }
             else super.onDisplayPreferenceDialog(preference);
         }

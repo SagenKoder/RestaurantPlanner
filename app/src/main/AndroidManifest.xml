@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="app.sagen.restaurantplanner">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <permission android:name="app.sagen.restaurantplanner.permission"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".service.Result"/>
         <activity
             android:name=".preferences.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".ui.restaurants.CreateRestaurantActivity"
             android:theme="@style/AppTheme.PopupTheme" />
@@ -28,10 +34,28 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".service.NotificationService" />
+        <service android:name=".service.EnablePeriodicService" />
+
+        <receiver android:name=".service.NotificationBroadcastReciever" android:exported="false">
+            <intent-filter>
+                <action android:name="app.sagen.restaurantplanner.startService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:authorities="app.sagen.restaurantplanner"
+            android:name=".data.RestaurantPlannerProvider"
+            android:enabled="true"
+            android:exported="true"
+            android:readPermission="app.sagen.restaurantplanner.permission"
+            android:writePermission="app.sagen.restaurantplanner.permission"/>
+
     </application>
 
 </manifest>

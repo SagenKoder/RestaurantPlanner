@@ -1,4 +1,4 @@
-package app.sagen.restaurantplanner.db;
+package app.sagen.restaurantplanner.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,25 +13,25 @@ import androidx.annotation.Nullable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
-
-import app.sagen.restaurantplanner.data.Booking;
-import app.sagen.restaurantplanner.data.Friend;
-import app.sagen.restaurantplanner.data.Restaurant;
 
 public class DBHandler extends SQLiteOpenHelper {
 
     private static final String TAG = "DBHandler";
 
     private static String DATABASE_NAME = "RestaurantPlanner";
-    private static int DATABASE_VERSION = 22;
+    private static int DATABASE_VERSION = 23;
 
     public DBHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public SQLiteDatabase getDb() {
+        return getWritableDatabase();
     }
 
     @Override
@@ -87,60 +87,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Log.d(TAG, "onCreate: SQL " + createBookingHasFriendTable);
         db.execSQL(createBookingHasFriendTable);
-
-        //seedFriends(db);
-//        seedRestaurants(db);
-//
-//        Restaurant restaurant = new Restaurant("MyFancyRestaurant", "Nils Olav Gate 3", "12345678", "Bar");
-//        createRestaurant(db, restaurant);
-//
-//        Booking booking = new Booking();
-//        booking.setDateTime(new Date());
-//        booking.setRestaurant(restaurant); // same restaurant
-//        booking.setFriends(seedFriends(db)); // created 5 friends
-//        createBooking(db, booking);
-//
-//        Booking booking2 = new Booking();
-//        booking2.setDateTime(new Date());
-//        booking2.setRestaurant(restaurant); // same restaurant
-//        booking2.setFriends(seedFriends(db)); // created 5 friends
-//        createBooking(db, booking2);
-    }
-
-    public List<Friend> seedFriends(SQLiteDatabase db) {
-        List<Friend> friends = new ArrayList<>();
-        String names =
-                "    Mistie Mcaleer\n" +
-                        "    Rebeca Renick\n" +
-                        "    Yesenia Yardley\n" +
-                        "    Eduardo Eisenbarth";
-        Random random = new Random();
-        for (String name : names.trim().split("\n")) {
-            friends.add(new Friend(name.trim(), String.valueOf(random.nextInt(89999999) + 10000000)));
-        }
-
-        for (Friend friend : friends) createFriend(db, friend);
-
-        return friends;
-    }
-
-    public void seedRestaurants(SQLiteDatabase db) {
-        List<Restaurant> restaurants = new ArrayList<>();
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-        restaurants.add(new Restaurant("Greasy Burgers", "Kaj Munksgate 4", "", "BurgerJoint"));
-
-        Random random = new Random();
-        for (Restaurant restaurant : restaurants) {
-            restaurant.setPhone(String.valueOf(random.nextInt(89999999) + 10000000));
-            createRestaurant(db, restaurant);
-        }
     }
 
     @Override
@@ -404,7 +350,7 @@ public class DBHandler extends SQLiteOpenHelper {
     /* /RESTAURANT */
 
     /* BOOKING */
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     public void createBooking(Booking booking) {
         try (SQLiteDatabase db = this.getWritableDatabase()) {
@@ -412,6 +358,57 @@ public class DBHandler extends SQLiteOpenHelper {
         } catch (SQLException e) {
             Log.e(TAG, "createBooking: ", e);
         }
+    }
+
+    public List<Booking> getAllBookingsNext24H() {
+        Calendar now = Calendar.getInstance();
+        Calendar after24h = Calendar.getInstance();
+        after24h.add(Calendar.HOUR, 24);
+
+        Log.i(TAG, String.format("getAllBookingsNext24H: %s - %s", sdf.format(now.getTime()), sdf.format(after24h.getTime())));
+
+        List<Booking> bookings = new ArrayList<>();
+        String select = String.format("SELECT * FROM %s WHERE %s BETWEEN '%s' AND '%s'",
+                Booking.TABLE_BOOKING,
+                Booking.COLUMN_DATE,
+                sdf.format(now.getTime()),
+                sdf.format(after24h.getTime()));
+
+        Log.i(TAG, "getAllBookingsNext24H: SQL " + select);
+
+        try (SQLiteDatabase db = this.getWritableDatabase();
+             Cursor cursor = db.rawQuery(select, null)) {
+
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+
+                    try {
+                        Booking booking = new Booking();
+                        booking.setId(cursor.getLong(0));
+                        booking.setDateTime(sdf.parse(cursor.getString(1)));
+                        booking.setRestaurant(getRestaurant(cursor.getLong(2)));
+                        booking.setFriends(getFriendBookings(booking));
+                        bookings.add(booking);
+
+                    } catch (ParseException e) {
+                        Log.e(TAG, "getAllBookings: ", e);
+                    }
+
+                    cursor.moveToNext();
+                }
+            }
+        }
+
+        Collections.sort(bookings, new Comparator<Booking>() {
+            @Override
+            public int compare(Booking o1, Booking o2) {
+                return o1.getDateTime().compareTo(o2.getDateTime());
+            }
+        });
+
+        Log.d(TAG, "getAllBookings: BOOKINGS " + bookings);
+
+        return bookings;
     }
 
     public Booking createBooking(SQLiteDatabase db, Booking booking) {

@@ -6,7 +6,7 @@ import java.util.List;
 public class Booking {
 
     public static final String TABLE_BOOKING = "booking";
-    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DATE = "booking_date";
     public static final String COLUMN_RESTAURANT_ID = "restaurant_id";
 

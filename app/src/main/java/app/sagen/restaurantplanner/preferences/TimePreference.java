@@ -3,6 +3,7 @@ package app.sagen.restaurantplanner.preferences;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.preference.DialogPreference;
@@ -10,6 +11,8 @@ import androidx.preference.DialogPreference;
 import app.sagen.restaurantplanner.R;
 
 public class TimePreference extends DialogPreference {
+
+    private static final String TAG = "TimePreference";
 
     private int hour, minute;
 
@@ -30,9 +33,14 @@ public class TimePreference extends DialogPreference {
     }
 
     public void setTime(int hour, int minute) {
+        Log.d(TAG, String.format("setTime: %s %s", hour, minute));
         this.hour = hour;
         this.minute = minute;
-        persistString((hour < 10 ? String.format("0%s:%s", hour, minute) : String.format("%s:%s", hour, minute)));
+        String hourString = hour < 10 ? "0" + hour : String.valueOf(hour);
+        String minuteString = minute < 10 ? "0" + minute : String.valueOf(minute);
+        String persistentString = String.format("%s:%s", hourString, minuteString);
+        Log.d(TAG, "setTime: persistentstring=" + persistentString);
+        persistString(persistentString);
     }
 
     public int getHour() {
@@ -45,12 +53,21 @@ public class TimePreference extends DialogPreference {
 
     @Override
     protected Object onGetDefaultValue(TypedArray array, int index) {
-        return array.getString(index);
+        String defaultValue = array.getString(index);
+        Log.d(TAG, "onGetDefaultValue: DefaultValue=" + defaultValue);
+        return defaultValue;
     }
 
+
+
     @Override
-    protected void onSetInitialValue(@Nullable Object defaultValue) {
-        String time = (String)defaultValue;
+    protected void onSetInitialValue(boolean restore, @Nullable Object defaultValue) {
+        String time;
+        if(restore) {
+            time = getPersistedString((String)defaultValue);
+        } else {
+            time = (String) defaultValue;
+        }
         try {
             String[] split = time.trim().split(":");
             int hour = Math.min(Math.max(Integer.parseInt(split[0].trim()), 0), 23);
