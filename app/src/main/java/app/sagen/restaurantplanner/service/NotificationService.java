@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -66,8 +65,8 @@ public class NotificationService extends Service {
             Log.i(TAG, "onStartCommand: Trying to send notification!");
 
             Notification notification = new NotificationCompat.Builder(this)
-                    .setContentTitle(booking.getRestaurant().getName())
-                    .setContentText(booking.getRestaurant().getAddress())
+                    .setContentTitle("RestaurantPlanner")
+                    .setContentText("Du har en booking idag hos " + booking.getRestaurant().getName())
                     .setSmallIcon(R.drawable.ic_restaurant_black_24dp)
                     .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
