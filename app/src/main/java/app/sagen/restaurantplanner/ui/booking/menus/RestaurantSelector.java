@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.List;
 
+import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Restaurant;
 
 public class RestaurantSelector extends DialogFragment {
@@ -30,7 +31,7 @@ public class RestaurantSelector extends DialogFragment {
         this.callback = callback;
 
         restaurantNames = new String[restaurants.size()];
-        for(int i = 0; i < restaurantNames.length; i++){
+        for (int i = 0; i < restaurantNames.length; i++) {
             Restaurant restaurant = this.restaurants[i];
             restaurantNames[i] = String.format("%s (%s)", restaurant.getName(), restaurant.getType());
         }
@@ -40,7 +41,7 @@ public class RestaurantSelector extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Velg en restaurant");
+        builder.setTitle(getString(R.string.pick_a_restaurant_title));
         builder.setSingleChoiceItems(restaurantNames, activeItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

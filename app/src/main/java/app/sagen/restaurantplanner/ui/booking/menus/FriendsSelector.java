@@ -18,7 +18,7 @@ import app.sagen.restaurantplanner.data.Friend;
 public class FriendsSelector extends DialogFragment {
 
     private static final String TAG = "FriendsSelector";
-    
+
     public interface FriendSelectorCallback {
         void onFinish(List<Friend> addFriends, List<Friend> removeFriends);
     }
@@ -36,13 +36,13 @@ public class FriendsSelector extends DialogFragment {
         this.callback = callback;
 
         friendNames = new String[friends.size()];
-        for(int i = 0; i < friendNames.length; i++){
+        for (int i = 0; i < friendNames.length; i++) {
             Friend friend = this.friends[i];
             friendNames[i] = friend.getName();
         }
 
         this.selectedItems = new boolean[friendNames.length];
-        for(int i = 0; i < friendNames.length; i++){
+        for (int i = 0; i < friendNames.length; i++) {
             Friend friend = this.friends[i];
             selectedItems[i] = selectedFriends.contains(friend);
         }
@@ -57,12 +57,12 @@ public class FriendsSelector extends DialogFragment {
             public void onClick(DialogInterface dialog, int item, boolean isChecked) {
                 isChecked = !isChecked; // update to next value
                 Log.e(TAG, "onClick: item=" + item + " checked=" + isChecked + " selecteditem=" + selectedItems[item]);
-                if(selectedItems[item] && !isChecked) {
+                if (selectedItems[item] && !isChecked) {
                     Log.e(TAG, "onClick: Add");
                     addFriends.add(friends[item]);
                     removeFriends.remove(friends[item]);
                     selectedItems[item] = true;
-                } else if(!selectedItems[item] && isChecked) {
+                } else if (!selectedItems[item] && isChecked) {
                     Log.e(TAG, "onClick: Remove");
                     addFriends.remove(friends[item]);
                     removeFriends.add(friends[item]);

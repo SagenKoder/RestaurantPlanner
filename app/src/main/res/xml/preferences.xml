@@ -1,11 +1,10 @@
-<PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory app:title="Varseltjeneste">
         <SwitchPreferenceCompat
             app:key="NotificationSerice"
             app:title="@string/settings_enable_notifications_title"
             app:defaultValue="true"
-            app:useSimpleSummaryProvider="true"  />
+            app:useSimpleSummaryProvider="true" />
         <app.sagen.restaurantplanner.preferences.TimePreference
             app:key="SmsTimeOfDay"
             app:defaultValue="08:00"
@@ -20,7 +19,7 @@
             app:defaultValue="true"
             app:dependency="NotificationSerice"
             app:title="@string/settings_enable_sms_title"
-            app:useSimpleSummaryProvider="true"  />
+            app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             app:key="SmsMessage"
             app:title="@string/settings_sms_message_title"

@@ -4,13 +4,13 @@
     <item
         android:id="@+id/edit"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Edit"
-        android:enabled="true"/>
+        android:title="@string/rediger"
+        android:enabled="true" />
 
     <item
         android:id="@+id/delete"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="Delete"
-        android:enabled="true"/>
+        android:title="@string/slett"
+        android:enabled="true" />
 
 </menu>

@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border_item_background">
-    
+
     <TextView
         android:id="@+id/restaurant_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Greasy Heaven"
+        android:text=""
         android:textSize="20sp"
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
@@ -28,7 +28,7 @@
             <TextView
                 android:id="@+id/restaurant_type_title"
                 android:layout_height="wrap_content"
-                android:text="Type: "
+                android:text="@string/type"
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/restaurant_type"
                 android:layout_span="2"
                 android:layout_height="wrap_content"
-                android:text="Burger Joint"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/restaurant_address_name"
                 android:layout_height="wrap_content"
-                android:text="Addresse: "
+                android:text="@string/addresse"
                 android:textSize="15sp"
 
                 android:layout_gravity="center_vertical" />
@@ -56,7 +56,7 @@
                 android:id="@+id/restaurant_address"
                 android:layout_span="2"
                 android:layout_height="wrap_content"
-                android:text="Bergsalleen 8c, 0854 Oslo"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -67,7 +67,7 @@
             <TextView
                 android:id="@+id/restaurant_phone_name"
                 android:layout_height="wrap_content"
-                android:text="Telefon: "
+                android:text="@string/telefon"
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -75,7 +75,7 @@
                 android:id="@+id/restaurant_phone"
                 android:layout_span="2"
                 android:layout_height="wrap_content"
-                android:text="48073448"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 

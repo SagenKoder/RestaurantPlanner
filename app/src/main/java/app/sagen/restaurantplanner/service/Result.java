@@ -1,10 +1,8 @@
 package app.sagen.restaurantplanner.service;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-import app.sagen.restaurantplanner.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Result extends AppCompatActivity {
 

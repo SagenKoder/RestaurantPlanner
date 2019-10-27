@@ -12,7 +12,7 @@ public class NotificationBroadcastReciever extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "I NotificationBroadcastReciever", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "I NotificationBroadcastReciever", Toast.LENGTH_LONG).show();
         Log.d(TAG, "onReceive: Recieved notification");
 
         Intent i = new Intent(context, EnablePeriodicService.class);

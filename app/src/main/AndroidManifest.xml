@@ -4,9 +4,9 @@
     package="app.sagen.restaurantplanner">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
-    <permission android:name="app.sagen.restaurantplanner.permission"/>
+    <permission android:name="app.sagen.restaurantplanner.permission" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".service.Result"/>
+        <activity android:name=".service.Result" />
         <activity
             android:name=".preferences.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -41,10 +41,12 @@
         <service android:name=".service.NotificationService" />
         <service android:name=".service.EnablePeriodicService" />
 
-        <receiver android:name=".service.NotificationBroadcastReciever" android:exported="false">
+        <receiver
+            android:name=".service.NotificationBroadcastReciever"
+            android:exported="false">
             <intent-filter>
                 <action android:name="app.sagen.restaurantplanner.startService" />
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -54,7 +56,7 @@
             android:enabled="true"
             android:exported="true"
             android:readPermission="app.sagen.restaurantplanner.permission"
-            android:writePermission="app.sagen.restaurantplanner.permission"/>
+            android:writePermission="app.sagen.restaurantplanner.permission" />
 
     </application>
 

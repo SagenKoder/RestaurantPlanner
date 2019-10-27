@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class RestaurantPlannerProvider extends ContentProvider  {
+public class RestaurantPlannerProvider extends ContentProvider {
 
     // Designet etter dette svaret: https://stackoverflow.com/questions/3814005/best-practices-for-exposing-multiple-tables-using-content-providers-in-android
 
@@ -31,7 +31,9 @@ public class RestaurantPlannerProvider extends ContentProvider  {
     public static final int RESTAURANT_GET_ONE = 201;
     public static final int BOOKING_GET_ALL = 300;
     public static final int BOOKING_GET_ONE = 301;
-    
+    // todo: public static final int BOOKING_GET_ONE_FRIEND = 302;
+    // todo: public static final int BOOKING_GET_ONE_RESTAURANTS = 303;
+
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -43,6 +45,8 @@ public class RestaurantPlannerProvider extends ContentProvider  {
         URI_MATCHER.addURI(content, PATH_RESTAURANT + "/#", RESTAURANT_GET_ONE);
         URI_MATCHER.addURI(content, PATH_BOOKING, BOOKING_GET_ALL);
         URI_MATCHER.addURI(content, PATH_BOOKING + "/#", BOOKING_GET_ONE);
+        // todo: URI_MATCHER.addURI(content, PATH_BOOKING + "/#/" + PATH_FRIEND, BOOKING_GET_ONE_FRIEND);
+        // todo: URI_MATCHER.addURI(content, PATH_BOOKING + "/#/" + PATH_RESTAURANT, BOOKING_GET_ONE_RESTAURANTS);
     }
 
     DBHandler dbHandler;
@@ -56,17 +60,24 @@ public class RestaurantPlannerProvider extends ContentProvider  {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        switch(URI_MATCHER.match(uri)) {
-            case FRIEND_GET_ALL: return FriendEntry.CONTENT_TYPE;
-            case FRIEND_GET_ONE: return FriendEntry.CONTENT_ITEM_TYPE;
+        switch (URI_MATCHER.match(uri)) {
+            case FRIEND_GET_ALL:
+                return FriendEntry.CONTENT_TYPE;
+            // todo: case BOOKING_GET_ONE_FRIEND:
+            case FRIEND_GET_ONE:
+                return FriendEntry.CONTENT_ITEM_TYPE;
+            // todo: case BOOKING_GET_ONE_RESTAURANTS:
+            case RESTAURANT_GET_ALL:
+                return RestaurantEntry.CONTENT_TYPE;
+            case RESTAURANT_GET_ONE:
+                return RestaurantEntry.CONTENT_ITEM_TYPE;
+            case BOOKING_GET_ALL:
+                return BookingEntry.CONTENT_TYPE;
+            case BOOKING_GET_ONE:
+                return BookingEntry.CONTENT_ITEM_TYPE;
 
-            case RESTAURANT_GET_ALL: return RestaurantEntry.CONTENT_TYPE;
-            case RESTAURANT_GET_ONE: return RestaurantEntry.CONTENT_ITEM_TYPE;
-
-            case BOOKING_GET_ALL: return BookingEntry.CONTENT_TYPE;
-            case BOOKING_GET_ONE: return BookingEntry.CONTENT_ITEM_TYPE;
-
-            default: throw new UnsupportedOperationException("Unknown URI " + uri);
+            default:
+                throw new UnsupportedOperationException("Unknown URI " + uri);
         }
     }
 
@@ -75,7 +86,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteDatabase db = dbHandler.getDb();
         Cursor cursor;
-        switch(URI_MATCHER.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
 
             case FRIEND_GET_ALL:
                 cursor = db.query(
@@ -164,7 +175,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
         switch (URI_MATCHER.match(uri)) {
             case FRIEND_GET_ALL:
                 id = db.insert(FriendEntry.TABLE_NAME, null, values);
-                if(id > 0) {
+                if (id > 0) {
                     insertedUri = FriendEntry.buildFriendUri(id);
                 } else {
                     throw new UnsupportedOperationException("Could not insert row into " + uri);
@@ -172,7 +183,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
                 break;
             case RESTAURANT_GET_ALL:
                 id = db.insert(RestaurantEntry.TABLE_NAME, null, values);
-                if(id > 0) {
+                if (id > 0) {
                     insertedUri = RestaurantEntry.buildRestaurantUri(id);
                 } else {
                     throw new UnsupportedOperationException("Could not insert row into " + uri);
@@ -180,7 +191,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
                 break;
             case BOOKING_GET_ALL:
                 id = db.insert(BookingEntry.TABLE_NAME, null, values);
-                if(id > 0) {
+                if (id > 0) {
                     insertedUri = BookingEntry.buildBookingUri(id);
                 } else {
                     throw new UnsupportedOperationException("Could not insert row into " + uri);
@@ -214,7 +225,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
                 throw new UnsupportedOperationException("Unknown uri " + uri);
         }
 
-        if(selection == null || rows != 0){
+        if (selection == null || rows != 0) {
             Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
         }
 
@@ -240,7 +251,7 @@ public class RestaurantPlannerProvider extends ContentProvider  {
                 throw new UnsupportedOperationException("Unknown uri " + uri);
         }
 
-        if(rows >= 0) {
+        if (rows >= 0) {
             Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
         }
 

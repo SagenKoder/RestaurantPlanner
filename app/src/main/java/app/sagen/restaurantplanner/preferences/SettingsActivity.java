@@ -3,14 +3,12 @@ package app.sagen.restaurantplanner.preferences;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 
@@ -36,7 +34,7 @@ public class SettingsActivity extends Activity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -68,8 +66,7 @@ public class SettingsActivity extends Activity {
                 timeFragment.setTargetFragment(this, 0);
                 FragmentManager fragmentManager = getFragmentManager();
                 timeFragment.show(fragmentManager, "someRandomTag");
-            }
-            else super.onDisplayPreferenceDialog(preference);
+            } else super.onDisplayPreferenceDialog(preference);
         }
     }
 }

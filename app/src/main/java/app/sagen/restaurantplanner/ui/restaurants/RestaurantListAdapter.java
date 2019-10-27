@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;

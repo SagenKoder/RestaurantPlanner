@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="5dp"
-        android:text="Registrer en booking"
+        android:text="@string/registrer_en_booking"
         android:textColor="#222"
         android:textSize="25sp"
         android:typeface="serif" />
@@ -23,7 +23,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Dato og tid"
         android:textSize="25sp" />
 
     <Button
@@ -31,8 +30,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:hint="Dato og tid"/>
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:textAlignment="center"
@@ -40,16 +38,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Dato og tid"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/create_booking_restaurant"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:hint="Restaurant"/>
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:textAlignment="center"
@@ -57,16 +53,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Dato og tid"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/create_booking_friend"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:hint="Restaurant"/>
+        android:layout_marginTop="10dp" />
 
     <Button
         android:id="@+id/create_booking_submit"
@@ -77,6 +71,6 @@
         android:elevation="4dp"
         android:paddingLeft="70dp"
         android:paddingRight="70dp"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="#fff" />
 </LinearLayout>

@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import app.sagen.restaurantplanner.R;
-import app.sagen.restaurantplanner.data.Restaurant;
 import app.sagen.restaurantplanner.data.DBHandler;
+import app.sagen.restaurantplanner.data.Restaurant;
 
 public class CreateRestaurantActivity extends AppCompatActivity {
 

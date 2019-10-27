@@ -59,12 +59,11 @@ public class TimePreference extends DialogPreference {
     }
 
 
-
     @Override
     protected void onSetInitialValue(boolean restore, @Nullable Object defaultValue) {
         String time;
-        if(restore) {
-            time = getPersistedString((String)defaultValue);
+        if (restore) {
+            time = getPersistedString((String) defaultValue);
         } else {
             time = (String) defaultValue;
         }

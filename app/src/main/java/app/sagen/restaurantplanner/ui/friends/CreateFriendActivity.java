@@ -12,8 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import app.sagen.restaurantplanner.R;
-import app.sagen.restaurantplanner.data.Friend;
 import app.sagen.restaurantplanner.data.DBHandler;
+import app.sagen.restaurantplanner.data.Friend;
 
 public class CreateFriendActivity extends AppCompatActivity {
 
@@ -54,7 +54,7 @@ public class CreateFriendActivity extends AppCompatActivity {
                 finish(); // just exit...
                 return;
             }
-            title.setText("Rediger en venn");
+            title.setText(getString(R.string.edit_friend));
             nameInput.setText(friend.getName());
             phoneInput.setText(friend.getPhone());
         }
@@ -67,10 +67,10 @@ public class CreateFriendActivity extends AppCompatActivity {
                     friend.setName(nameInput.getText().toString());
                     friend.setPhone(phoneInput.getText().toString());
                     dbHandler.updateFriend(friend);
-                    Toast.makeText(getApplicationContext(), "Endring lagret!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.changes_saved), Toast.LENGTH_SHORT).show();
                 } else {
                     dbHandler.createFriend(new Friend(nameInput.getText().toString(), phoneInput.getText().toString()));
-                    Toast.makeText(getApplicationContext(), "Du la til en ny venn!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.added_new_friend), Toast.LENGTH_SHORT).show();
                 }
                 finish();
             }

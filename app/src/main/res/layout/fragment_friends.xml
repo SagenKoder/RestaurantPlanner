@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_add_white_24dp"
-        android:contentDescription="Create new friend"
+        android:contentDescription="@string/lag_en_ny_venn"
         android:layout_margin="16dp" />
 
 </FrameLayout>

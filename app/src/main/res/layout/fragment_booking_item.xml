@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border_item_background">
-    
+
     <TextView
         android:id="@+id/booking_restaurant"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Greasy Heaven"
+        android:text=""
         android:textSize="20sp"
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
@@ -28,7 +28,7 @@
             <TextView
                 android:id="@+id/booking_date_label"
                 android:layout_height="wrap_content"
-                android:text="Dag og tid: "
+                android:text="@string/dag_og_tid"
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/booking_date"
                 android:layout_span="2"
                 android:layout_height="wrap_content"
-                android:text="15/02/2017 17:30"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 
@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/booking_friends_label"
                 android:layout_height="wrap_content"
-                android:text="Antall venner: "
+                android:text="@string/antall_venner"
                 android:textSize="15sp"
 
                 android:layout_gravity="center_vertical" />
@@ -56,7 +56,7 @@
                 android:id="@+id/booking_friends"
                 android:layout_span="2"
                 android:layout_height="wrap_content"
-                android:text="4"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_gravity="center_vertical" />
 

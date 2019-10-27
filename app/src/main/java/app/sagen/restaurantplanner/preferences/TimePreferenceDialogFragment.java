@@ -7,14 +7,13 @@ import android.widget.TimePicker;
 
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceDialogFragment;
-import androidx.preference.PreferenceDialogFragmentCompat;
 
 import app.sagen.restaurantplanner.R;
 
 public class TimePreferenceDialogFragment extends PreferenceDialogFragment {
 
     private static final String TAG = "TimePreferenceDialogFra";
-    
+
     TimePicker timePicker;
 
     public static TimePreferenceDialogFragment newInstance(String key) {

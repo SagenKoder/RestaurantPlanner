@@ -21,7 +21,7 @@ public class EnablePeriodicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "I EnablePeriodicService", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "I EnablePeriodicService", Toast.LENGTH_LONG).show();
         Log.d(TAG, "onStartCommand: START");
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -29,7 +29,7 @@ public class EnablePeriodicService extends Service {
         // only run if enabled
         boolean runService = defaultSharedPreferences.getBoolean("NotificationSerice", true);
         Log.d(TAG, String.format("onStartCommand: runService=%s", runService));
-        if(!runService) return super.onStartCommand(intent, flags, startId);
+        if (!runService) return super.onStartCommand(intent, flags, startId);
 
         // time of day
         String smsTimeOfDay = defaultSharedPreferences.getString("SmsTimeOfDay", "08:00");
@@ -45,16 +45,20 @@ public class EnablePeriodicService extends Service {
         }
         Log.d(TAG, String.format("onStartCommand: time=%s minute=%s", hour, minute));
 
+        // create intent
+        Intent i = new Intent(this, NotificationService.class);
+        PendingIntent pintent = PendingIntent.getService(this, 0, i, 0);
+
         // start alarm
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
         cal.set(Calendar.SECOND, 0);
-        Intent i = new Intent(this, NotificationService.class);
-        PendingIntent pintent = PendingIntent.getService(this, 0, i, 0);
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pintent);
+        if (alarm != null) {
+            alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pintent);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

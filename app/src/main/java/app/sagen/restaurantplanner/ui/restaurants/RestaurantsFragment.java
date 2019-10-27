@@ -19,8 +19,8 @@ import androidx.fragment.app.ListFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import app.sagen.restaurantplanner.R;
-import app.sagen.restaurantplanner.data.Restaurant;
 import app.sagen.restaurantplanner.data.DBHandler;
+import app.sagen.restaurantplanner.data.Restaurant;
 
 public class RestaurantsFragment extends ListFragment {
 
@@ -35,7 +35,7 @@ public class RestaurantsFragment extends ListFragment {
         db = new DBHandler(getContext());
         restaurantListAdapter = new RestaurantListAdapter(getActivity());
         setListAdapter(restaurantListAdapter);
-        setEmptyText("Du har ingen restauranter i listen. Opprett en ny med + knappen!");
+        setEmptyText(getContext().getString(R.string.no_restaurant));
     }
 
     @Nullable

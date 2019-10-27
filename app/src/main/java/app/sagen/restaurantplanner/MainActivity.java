@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.d(TAG, String.format("onSharedPreferenceChanged: KEY=%s", key));
-            if(key.equalsIgnoreCase("SmsTimeOfDay") || key.equalsIgnoreCase("NotificationSerice")) {
-                if(sharedPreferences.getBoolean("NotificationSerice", true)) {
+            if (key.equalsIgnoreCase("SmsTimeOfDay") || key.equalsIgnoreCase("NotificationSerice")) {
+                if (sharedPreferences.getBoolean("NotificationSerice", true)) {
                     startService();
                 } else {
                     stopService();
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
         }
 
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, 1);
         }
 
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     public void startService() {

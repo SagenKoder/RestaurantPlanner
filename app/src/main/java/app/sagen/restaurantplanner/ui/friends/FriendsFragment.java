@@ -19,8 +19,8 @@ import androidx.fragment.app.ListFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import app.sagen.restaurantplanner.R;
-import app.sagen.restaurantplanner.data.Friend;
 import app.sagen.restaurantplanner.data.DBHandler;
+import app.sagen.restaurantplanner.data.Friend;
 
 public class FriendsFragment extends ListFragment {
 
@@ -35,7 +35,7 @@ public class FriendsFragment extends ListFragment {
         db = new DBHandler(getContext());
         friendsListAdapter = new FriendsListAdapter(getActivity());
         setListAdapter(friendsListAdapter);
-        setEmptyText("Du har ingen venner i listen. Opprett en ny venn med + knappen!");
+        setEmptyText(getContext().getString(R.string.no_friends));
     }
 
     @Nullable

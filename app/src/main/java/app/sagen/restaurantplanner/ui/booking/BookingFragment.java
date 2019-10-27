@@ -36,7 +36,7 @@ public class BookingFragment extends ListFragment {
         db = new DBHandler(getContext());
         bookingListAdapter = new BookingListAdapter(getActivity());
         setListAdapter(bookingListAdapter);
-        setEmptyText("Du har ingen bookinger i listen. Opprett en ny med + knappen!");
+        setEmptyText(getContext().getString(R.string.no_bookings));
     }
 
     @Nullable
@@ -51,11 +51,11 @@ public class BookingFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: BOOKINGER");
-                if(db.getAllRestaurants().size() == 0) {
+                if (db.getAllRestaurants().size() == 0) {
                     AlertDialog alertDialog = new AlertDialog.Builder(BookingFragment.this.getActivity()).create();
-                    alertDialog.setTitle("Ingen restauranter");
-                    alertDialog.setMessage("Gå til restaurant panelet for å legge til en restaurant først.");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    alertDialog.setTitle(getContext().getString(R.string.no_restaurant_title));
+                    alertDialog.setMessage(getContext().getString(R.string.no_restaurant_body));
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();

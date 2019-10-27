@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="5dp"
-        android:text="Registrer en restaurant"
+        android:text="@string/registrer_en_restaurant"
         android:textColor="#222"
         android:textSize="25sp"
         android:typeface="serif" />
@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Navn"
+        android:hint="@string/navn"
         android:inputType="textPersonName" />
 
     <EditText
@@ -32,7 +32,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Telefon"
+        android:hint="@string/telefon"
         android:inputType="phone" />
 
     <EditText
@@ -42,7 +42,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Addresse"
+        android:hint="@string/addresse"
         android:inputType="textPostalAddress" />
 
     <EditText
@@ -52,7 +52,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/primaryDarkColor"
-        android:hint="Kategori"
+        android:hint="@string/kategori"
         android:inputType="textShortMessage" />
 
     <Button
@@ -64,6 +64,6 @@
         android:elevation="4dp"
         android:paddingLeft="70dp"
         android:paddingRight="70dp"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="#fff" />
 </LinearLayout>

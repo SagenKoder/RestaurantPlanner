@@ -10,13 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Booking;
-import app.sagen.restaurantplanner.data.Restaurant;
 
 public class BookingListAdapter extends ArrayAdapter<Booking> {
 

@@ -22,9 +22,9 @@ import java.util.Locale;
 
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Booking;
+import app.sagen.restaurantplanner.data.DBHandler;
 import app.sagen.restaurantplanner.data.Friend;
 import app.sagen.restaurantplanner.data.Restaurant;
-import app.sagen.restaurantplanner.data.DBHandler;
 import app.sagen.restaurantplanner.ui.booking.menus.FriendsSelector;
 import app.sagen.restaurantplanner.ui.booking.menus.RestaurantSelector;
 
@@ -69,10 +69,10 @@ public class CreateBookingActivity extends AppCompatActivity {
         }
 
         List<Restaurant> restaurantList = dbHandler.getAllRestaurants();
-        if(booking.getRestaurant() == null) booking.setRestaurant(restaurantList.get(0));
+        if (booking.getRestaurant() == null) booking.setRestaurant(restaurantList.get(0));
 
         List<Friend> friendList = dbHandler.getAllFriends();
-        if(booking.getFriends() == null) booking.setFriends(new ArrayList<Friend>());
+        if (booking.getFriends() == null) booking.setFriends(new ArrayList<Friend>());
 
         final TextView restaurantInputLabel = findViewById(R.id.create_booking_restaurant_label);
         restaurantInputLabel.setText(booking.getRestaurant().getName());
@@ -172,14 +172,16 @@ public class CreateBookingActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(edit) {
+                if (edit) {
                     dbHandler.updateBookingDateOrRestaurant(booking);
-                    for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
-                    for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
+                    for (Friend remove : removeFriends)
+                        dbHandler.updateBookingRemoveFriend(booking, remove);
+                    for (Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
                 } else {
                     dbHandler.createBooking(booking);
-                    for(Friend remove : removeFriends) dbHandler.updateBookingRemoveFriend(booking, remove);
-                    for(Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
+                    for (Friend remove : removeFriends)
+                        dbHandler.updateBookingRemoveFriend(booking, remove);
+                    for (Friend add : addFriends) dbHandler.updateBookingAddFriend(booking, add);
                 }
                 finish();
             }
