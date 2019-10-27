@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import app.sagen.restaurantplanner.R;
 import app.sagen.restaurantplanner.data.Booking;
 import app.sagen.restaurantplanner.data.DBHandler;
+import app.sagen.restaurantplanner.data.Friend;
 
 public class NotificationService extends Service {
 
@@ -74,33 +76,21 @@ public class NotificationService extends Service {
 
             notificationManager.notify(0, notification);
 
-//            Notification notifikasjon = new NotificationCompat.Builder(this)
-//                    .setContentTitle("Planlagt restaurant idag")
-//                    .setContentText(String.format("Restaurant: %s\nKlokken: %s\nAddresse: %s\nAntall invitert: %s",
-//                            booking.getRestaurant().getName(),
-//                            sdf.format(booking.getDateTime()),
-//                            booking.getRestaurant().getAddress(),
-//                            booking.getFriends().size()))
-//                    .setSmallIcon(R.mipmap.ic_launcher)
-//                    .setContentIntent(pIntent).build();
-//            notifikasjon.flags |= Notification.FLAG_AUTO_CANCEL;
-
             /* Send sms */
+            if(sendsms) {
+                Log.i(TAG, "onStartCommand: sender sms");
+                SmsManager smsManager = SmsManager.getDefault();
 
-//            if(sendsms) {
-//                Log.i(TAG, "onStartCommand: sender sms");
-//                SmsManager smsManager = SmsManager.getDefault();
-//
-//                for (Friend friend : booking.getFriends()) {
-//                    Log.i(TAG, "onStartCommand: sender sms til venn " + friend);
-//                    smsManager.sendTextMessage(friend.getPhone(), null, smsMessage
-//                            .replace("%friend", friend.getName())
-//                            .replace("%restaurant", booking.getRestaurant().getName())
-//                            .replace("%time", sdf.format(booking.getDateTime()))
-//                            .replace("%address", booking.getRestaurant().getAddress())
-//                            .replace("%phone", booking.getRestaurant().getPhone()), null, null);
-//                }
-//            }
+                for (Friend friend : booking.getFriends()) {
+                    Log.i(TAG, "onStartCommand: sender sms til venn " + friend);
+                    smsManager.sendTextMessage(friend.getPhone(), null, smsMessage
+                            .replace("%friend", friend.getName())
+                            .replace("%restaurant", booking.getRestaurant().getName())
+                            .replace("%time", sdf.format(booking.getDateTime()))
+                            .replace("%address", booking.getRestaurant().getAddress())
+                            .replace("%phone", booking.getRestaurant().getPhone()), null, null);
+                }
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);
