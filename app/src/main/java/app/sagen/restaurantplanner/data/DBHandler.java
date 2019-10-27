@@ -270,10 +270,12 @@ public class DBHandler extends SQLiteOpenHelper {
         try (SQLiteDatabase db = this.getWritableDatabase()) {
             Log.d(TAG, "deleteRestaurant: RESTAURANT " + restaurant);
 
+            db.execSQL("DELETE FROM bookingFriend FROM " + Booking.TABLE_BOOKING_FRIEND + " AS bookingFriend INNER JOIN " + Booking.TABLE_BOOKING + " AS booking ON bookingFriend." + Booking.COLUMN_JOIN_BOOKING_ID + " = booking." + Booking.TABLE_BOOKING + " WHERE booking." + Booking.COLUMN_RESTAURANT_ID + " = " + restaurant.getId());
+
             // delete from booking table
-            db.delete(Booking.TABLE_BOOKING,
-                    Booking.COLUMN_RESTAURANT_ID + " = ?",
-                    new String[]{String.valueOf(restaurant.getId())});
+//            db.delete(Booking.TABLE_BOOKING,
+//                    Booking.COLUMN_RESTAURANT_ID + " = ?",
+//                    new String[]{String.valueOf(restaurant.getId())});
 
             // delete from restaurant table
             db.delete(

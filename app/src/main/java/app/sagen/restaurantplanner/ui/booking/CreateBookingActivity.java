@@ -32,7 +32,7 @@ public class CreateBookingActivity extends AppCompatActivity {
 
     private DBHandler dbHandler;
     private Calendar calendar = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     Booking booking;
     List<Friend> addFriends = new ArrayList<>();
@@ -65,6 +65,7 @@ public class CreateBookingActivity extends AppCompatActivity {
         } else {
             edit = false;
             this.booking = new Booking();
+            this.booking.setDateTime(calendar.getTime());
         }
 
         List<Restaurant> restaurantList = dbHandler.getAllRestaurants();

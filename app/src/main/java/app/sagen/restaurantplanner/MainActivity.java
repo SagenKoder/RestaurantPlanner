@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
         }
 
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS},1);
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED},1);
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, 1);
+        }
 
         intentFilter = new IntentFilter("app.sagen.restaurantplanner.startService");
         notificationBroadcastReciever = new NotificationBroadcastReciever();

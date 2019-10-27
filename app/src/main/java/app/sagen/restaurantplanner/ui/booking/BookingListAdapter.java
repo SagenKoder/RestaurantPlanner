@@ -20,7 +20,7 @@ import app.sagen.restaurantplanner.data.Restaurant;
 
 public class BookingListAdapter extends ArrayAdapter<Booking> {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     public BookingListAdapter(@NonNull Context context) {
         super(context, -1);
